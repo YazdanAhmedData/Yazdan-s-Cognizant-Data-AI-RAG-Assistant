@@ -1,0 +1,34 @@
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated embeddings
+embeddings.pkl
+embeddings.joblib
+embedded_jsons/
+
+# Generated output
+response.txt
+prompt.txt
+output.json
+
+# Course media and extracted data
+YouTube_Videos/
+audios/
+jsons/
+newjsons/
+oldjsons/
+preprocessed_jsons/
+
+# Secrets
+.env
+.env.*
+
+# Mac
+.DS_Store
+
+# Logs
+*.log

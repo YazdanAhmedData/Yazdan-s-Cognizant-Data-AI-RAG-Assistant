@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070916">
+
+    <title>Yazdan's RAG Assistant | AI Learning Intelligence</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- HTML sanitizer -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+</head>
+<body>
+
+    <!-- SVG FILTER: liquid distortion used inside the orb -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="liquid" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.009 0.013" numOctaves="2" seed="7" result="noise">
+                    <animate attributeName="baseFrequency"
+                             dur="28s"
+                             values="0.009 0.013; 0.014 0.009; 0.010 0.015; 0.009 0.013"
+                             repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="90"
+                                   xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- BACKGROUND EFFECTS -->
+
+    <div class="background-grid"></div>
+    <div class="ambient-glow glow-one"></div>
+    <div class="ambient-glow glow-two"></div>
+    <div class="ambient-glow glow-three"></div>
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <span>Y</span>
+            </div>
+
+            <div class="brand-name">
+                <h1>YAZDAN'S <span>RAG ASSISTANT</span></h1>
+                <p>PERSONAL AI LEARNING INTELLIGENCE</p>
+            </div>
+
+        </div>
+
+        <div class="header-right">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                SYSTEM ONLINE
+            </div>
+
+            <div class="version">
+                AI ENGINE <span>v1.0</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <main class="dashboard">
+
+        <!-- LEFT PANEL: COMMAND INPUT -->
+
+        <section class="panel left-panel">
+
+            <div class="section-label">
+                <span class="section-number">01</span>
+                COMMAND INTERFACE
+                <span class="section-line"></span>
+            </div>
+
+            <div class="panel-intro">
+
+                <span class="eyebrow">YOUR PERSONAL KNOWLEDGE ENGINE</span>
+
+                <h2>
+                    Ask anything.<br>
+                    <span>Discover everything.</span>
+                </h2>
+
+                <p>
+                    Explore the Cognizant Data & AI course
+                    through your intelligent Retrieval
+                    Augmented Generation assistant.
+                </p>
+
+            </div>
+
+
+            <!-- QUESTION INPUT -->
+
+            <div class="input-wrapper">
+
+                <label for="question">
+                    ENTER YOUR QUESTION
+                </label>
+
+                <textarea
+                    id="question"
+                    maxlength="2000"
+                    placeholder="Where is Generative AI explained in the course?"
+                ></textarea>
+
+                <div class="input-footer">
+
+                    <span id="charCount">0 / 2000</span>
+
+                    <span>CTRL + ENTER TO SEARCH</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH BUTTON -->
+
+            <button id="askButton" onclick="askQuestion()">
+
+                <span class="button-text">INITIATE SEARCH</span>
+
+                <span class="button-arrow">↗</span>
+
+            </button>
+
+
+            <!-- SUGGESTIONS -->
+
+            <div class="suggestions">
+
+                <div class="suggestion-heading">
+                    <span>✦</span>
+                    SUGGESTED QUERIES
+                </div>
+
+                <button onclick="setQuestion('Where is Generative AI discussed?')">
+                    <span class="suggestion-icon">◈</span>
+                    Generative AI
+                    <span class="suggestion-arrow">↗</span>
+                </button>
+
+                <button onclick="setQuestion('Where is data readiness taught?')">
+                    <span class="suggestion-icon">◈</span>
+                    Data Readiness
+                    <span class="suggestion-arrow">↗</span>
+                </button>
+
+                <button onclick="setQuestion('Explain responsible AI and where it is discussed.')">
+                    <span class="suggestion-icon">◈</span>
+                    Responsible AI
+                    <span class="suggestion-arrow">↗</span>
+                </button>
+
+                <button onclick="setQuestion('Where are machine learning concepts explained?')">
+                    <span class="suggestion-icon">◈</span>
+                    Machine Learning
+                    <span class="suggestion-arrow">↗</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- CENTRE PANEL: LIQUID GLASS ORB -->
+
+        <section class="core-section">
+
+            <div class="core-top-label">
+                <span class="core-indicator"></span>
+                NEURAL PROCESSING UNIT
+            </div>
+
+
+            <div class="core-container" id="coreContainer" data-state="ready">
+
+                <!-- Atmosphere -->
+                <div class="orb-aura"></div>
+                <div class="orb-orbit"></div>
+
+                <!-- Pulse rings -->
+                <div class="orb-ripple"></div>
+                <div class="orb-ripple"></div>
+                <div class="orb-ripple"></div>
+                <div class="orb-burst"></div>
+
+                <!-- Orbiting sparks -->
+                <div class="orb-sparks">
+                    <span class="spark s1"></span>
+                    <span class="spark s2"></span>
+                    <span class="spark s3"></span>
+                    <span class="spark s4"></span>
+                    <span class="spark s5"></span>
+                    <span class="spark s6"></span>
+                </div>
+
+                <!-- The orb -->
+                <div class="orb-tilt" id="orbTilt">
+                    <div class="orb-stage">
+
+                        <div class="orb-shell"></div>
+
+                        <div class="orb-sphere">
+
+                            <div class="orb-liquid">
+                                <span class="blob b1"></span>
+                                <span class="blob b2"></span>
+                                <span class="blob b3"></span>
+                                <span class="blob b4"></span>
+                                <span class="blob b5"></span>
+                                <span class="streak k1"></span>
+                                <span class="streak k2"></span>
+                                <span class="streak k3"></span>
+                            </div>
+
+                            <div class="orb-fresnel"></div>
+                            <div class="orb-gloss"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Status pill -->
+                <div class="core-pill">
+                    <span class="core-pill-icon">✦</span>
+                    <span class="core-pill-text" id="coreStatus">READY</span>
+                </div>
+
+            </div>
+
+
+            <!-- Voice-style waveform (bars are generated by script.js) -->
+            <div class="orb-wave" id="orbWave" aria-hidden="true"></div>
+
+
+            <div class="core-caption" id="coreCaption">
+                AWAITING YOUR COMMAND
+            </div>
+
+
+            <div class="processing-indicator" id="processingIndicator">
+
+                <span class="processing-dot"></span>
+
+                <span>NEURAL ENGINE STANDBY</span>
+
+            </div>
+
+
+            <!-- ENGINE INFORMATION -->
+
+            <div class="engine-info">
+
+                <div class="engine-item">
+
+                    <span class="engine-value">BGE-M3</span>
+
+                    <span class="engine-label">EMBEDDINGS</span>
+
+                </div>
+
+                <div class="engine-divider"></div>
+
+                <div class="engine-item">
+
+                    <span class="engine-value">LLAMA 3.2</span>
+
+                    <span class="engine-label">GENERATION</span>
+
+                </div>
+
+                <div class="engine-divider"></div>
+
+                <div class="engine-item">
+
+                    <span class="engine-value">RAG</span>
+
+                    <span class="engine-label">RETRIEVAL</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT PANEL: AI RESPONSE -->
+
+        <section class="panel right-panel">
+
+            <div class="section-label">
+
+                <span class="section-number">02</span>
+
+                INTELLIGENCE OUTPUT
+
+                <span class="section-line"></span>
+
+            </div>
+
+
+            <div class="output-heading">
+
+                <div>
+
+                    <span class="eyebrow">GENERATED INTELLIGENCE</span>
+
+                    <h2>AI Response</h2>
+
+                </div>
+
+                <div class="output-icon">✧</div>
+
+            </div>
+
+
+            <!-- RESPONSE STATUS -->
+
+            <div class="output-toolbar">
+
+                <div class="output-status">
+
+                    <span class="output-status-dot" id="outputStatusDot"></span>
+
+                    <span id="outputStatus">AWAITING INPUT</span>
+
+                </div>
+
+                <div class="toolbar-right">
+
+                    <div class="response-time">
+
+                        RESPONSE TIME:
+                        <span id="responseTime">--</span>
+
+                    </div>
+
+                    <button type="button" class="copy-btn" id="copyButton" disabled>
+                        ⧉ COPY
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OUTPUT AREA -->
+
+            <div class="output-box" id="output">
+
+                <div class="placeholder">
+
+                    <div class="placeholder-icon">
+                        ✧
+                    </div>
+
+                    <h3>Intelligence Awaits</h3>
+
+                    <p>
+                        Your AI-generated course insights,
+                        video references and timestamps
+                        will appear here.
+                    </p>
+
+                    <span>AWAITING YOUR FIRST QUERY</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="output-footer">
+
+                <span>✦ POWERED BY LOCAL AI</span>
+
+                <span>PRIVATE KNOWLEDGE BASE</span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div>
+            YAZDAN'S RAG ASSISTANT
+            <span>© 2026</span>
+        </div>
+
+        <div>
+            POWERED BY OLLAMA · LLAMA 3.2 · BGE-M3
+        </div>
+
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            ALL SYSTEMS OPERATIONAL
+        </div>
+
+    </footer>
+
+
+    <!-- TOAST -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
